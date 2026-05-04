@@ -16,5 +16,17 @@
       "rm -rf",
       "git reset --hard"
     ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git log --oneline -10 > \"C:/Users/Пользователь/.claude/projects/C--Users--------------Desktop-----------------aiobuchblog/memory/last_git_log.txt\""
+          }
+        ]
+      }
+    ]
   }
 }
