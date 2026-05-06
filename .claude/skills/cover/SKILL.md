@@ -17,10 +17,19 @@ allowed-tools: Bash
 
 **2. Составь промпт на английском**
 
+Пиши как описание реальной фотографии — конкретный объект крупным планом, материал, откуда свет, что на фоне. Не «промышленная атмосфера», а что именно видит камера.
+
 Шаблон:
 ```
-Industrial automation: [конкретный объект из темы — двигатель, контактор, щит управления]. Factory environment, electrical equipment. Dark industrial aesthetic, dramatic lighting, high contrast, photorealistic, no text, no people.
+Close-up photo of [конкретный объект: frequency converter display / contactor terminals / motor nameplate / control cabinet wiring], metal and plastic surfaces, industrial facility background with blurred machinery, cool blue light from indicator LEDs, shallow depth of field, professional industrial photography, sharp focus, no text, no people, no logos.
 ```
+
+Примеры хороших объектов по теме:
+- ЧРП / частотник → `frequency converter front panel with digital display and indicator lights`
+- Контактор → `heavy-duty electrical contactor with copper terminals and arc chambers`
+- Насос → `industrial pump volute casing with flange connections and pressure gauge`
+- Реле → `thermal overload relay with adjustment dial and trip indicator`
+- Щит управления → `open electrical control cabinet with DIN rail mounted components`
 
 Закодируй промпт для URL: пробелы → `%20`, запятые → `%2C`.
 
