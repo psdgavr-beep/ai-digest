@@ -7,6 +7,7 @@ tools:
   - Read
   - Bash
   - Glob
+permission_mode: default
 max_turns: 10
 ---
 

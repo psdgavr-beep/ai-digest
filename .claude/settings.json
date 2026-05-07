@@ -12,7 +12,8 @@
       "git log",
       "git diff",
       "git add",
-      "git commit"
+      "git commit",
+      "git push"
     ],
     "deny": [
       "*.env*",

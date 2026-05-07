@@ -6,6 +6,7 @@ tools:
   - mcp__tavily-search__tavily-search
   - Write
   - Read
+permission_mode: default
 max_turns: 5
 ---
 
