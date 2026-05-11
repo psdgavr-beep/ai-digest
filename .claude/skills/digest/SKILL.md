@@ -1,78 +1,50 @@
 ---
 name: digest
-description: Full cycle — search news via Tavily, write article, generate cover, commit and push.
+description: Full cycle — search news via Tavily, write article, generate cover, judge, commit and push.
 argument-hint: <тема статьи на русском, например "частотные преобразователи в насосных станциях">
-allowed-tools: mcp__tavily-search__tavily-search, Write, Edit, Bash, Glob
+allowed-tools: Agent, mcp__tavily-search__tavily-search, Write, Edit, Bash, Glob, Read
 ---
 
-Напиши новую статью для блога про промышленную автоматизацию.
+Запусти полный цикл публикации статьи через три субагента: article-writer → article-judge → publisher.
 
 Тема: $ARGUMENTS
 
-## Шаг 1. Поиск новостей
+## Шаг 1. Написать статью
 
-Используй `mcp__tavily-search__tavily-search` — сделай 2 запроса на английском по теме.
-Например, если тема "частотные преобразователи": запросы `"variable frequency drives industrial 2024 2025"` и `"VFD motor control energy saving case study"`.
-
-Выпиши 3–5 конкретных фактов или кейсов из результатов поиска — они лягут в основу статьи.
-
-## Шаг 2. Придумай slug и название
-
-Slug — 3–4 слова на английском строчными через дефис. Примеры: `vfd-pump-stations`, `soft-starter-vs-vfd`.
-
-Название — на русском, живое, без слов "инновационный/передовой/современный".
-
-## Шаг 3. Напиши статью
-
-Правила стиля:
-- Язык: русский, живой разговорный технический
-- Объём: 400–500 слов
-- Аудитория: главные энергетики, механики, инженеры-практики — базовые термины не объяснять
-- Позиция: бесконтактные решения предпочтительнее устаревших контактных схем
-- Структура: вступление → 2–3 раздела с заголовками H2 → короткий итог
-- Конкретика из новостей — вставлять как факты, без ссылок
-- Запрет: не упоминать производителей и конкретные модели
-
-## Шаг 4. Сохрани статью
-
-Определи сегодняшнюю дату командой:
-
-```bash
-date /t
-```
-
-Создай файл `src/content/blog/SLUG.md` с frontmatter:
-
-```markdown
----
-title: 'Заголовок статьи'
-description: 'Одно предложение — суть статьи для превью.'
-pubDate: 'YYYY-MM-DD'
-heroImage: '../../assets/covers/SLUG.jpg'
-tags: ['тег1', 'тег2', 'тег3']
----
-
-Текст статьи...
-```
-
-## Шаг 5. Сгенерируй обложку
-
-Запусти навык `/cover` передав slug и краткое описание темы:
+Запусти субагент **article-writer**, передав ему тему:
 
 ```
-/cover SLUG — краткое описание темы на русском
+Agent: article-writer
+Prompt: $ARGUMENTS
 ```
 
-## Шаг 6. Закоммить и запуши
+Субагент напишет статью и сгенерирует обложку. Запомни slug статьи из его ответа.
 
-```bash
-git add src/content/blog/SLUG.md src/assets/covers/SLUG.jpg
-git commit -m "add: НАЗВАНИЕ СТАТЬИ"
-git push
+## Шаг 2. Проверить статью
+
+Запусти субагент **article-judge**, передав ему путь к файлу статьи:
+
+```
+Agent: article-judge
+Prompt: src/content/blog/SLUG.md
 ```
 
-После push сообщи пользователю:
+Если субагент вернул `✅ ПРОШЛА ПРОВЕРКУ` — переходи к шагу 3.
+
+Если вернул `❌ НАРУШЕНИЯ НАЙДЕНЫ` — покажи пользователю список нарушений и **остановись**. Не публикуй статью.
+
+## Шаг 3. Опубликовать статью
+
+Запусти субагент **publisher**, передав ему slug:
+
+```
+Agent: publisher
+Prompt: SLUG
+```
+
+## Финал
+
+После успешной публикации сообщи:
 - Название статьи
-- Файл: `src/content/blog/SLUG.md`
-- Обложка: `src/assets/covers/SLUG.jpg`
-- Ссылка на сайт: `https://ai-digest-psdgavr-beep-projects.vercel.app/blog/SLUG`
+- Результат проверки: ✅ прошла
+- Ссылка: `https://ai-digest-psdgavr-beep-projects.vercel.app/blog/SLUG`
