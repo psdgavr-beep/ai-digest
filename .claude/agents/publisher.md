@@ -4,8 +4,6 @@ description: Коммитит и пушит готовую статью блог
 model: claude-haiku-4-5-20251001
 tools:
   - Bash
-  - Read
-  - Glob
 permission_mode: default
 max_turns: 5
 ---
